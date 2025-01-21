@@ -15,10 +15,15 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private final Role role = Role.CLIENT;
-    private LocalDate createdDate;
+    private LocalDate createdDate = LocalDate.now();
     private LocalDate modificationDate;
     private String createdBy;
     private String updateBy;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDate.now();
+    }
 
     public User() {
     }
