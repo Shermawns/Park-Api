@@ -14,7 +14,7 @@ public class User {
     private String username;
     private String password;
     @Enumerated(EnumType.STRING)
-    private final Role role = Role.CLIENT;
+    private Role role = Role.CLIENT;
     private LocalDate createdDate = LocalDate.now();
     private LocalDate modificationDate;
     private String createdBy;
@@ -36,6 +36,13 @@ public class User {
         this.modificationDate = modificationDate;
         this.createdBy = createdBy;
         this.updateBy = updateBy;
+    }
+
+    public User(String username, String password, Role role, String name) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdBy = name;
     }
 
     public Long getId() {
