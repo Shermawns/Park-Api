@@ -1,16 +1,13 @@
 package com.Park_Api.service;
 
 import com.Park_Api.entity.User;
+import com.Park_Api.exceptions.errors.DataIntegrityViolationException;
+import com.Park_Api.exceptions.errors.EntityNotFoundException;
+import com.Park_Api.exceptions.errors.PasswordInvalidException;
 import com.Park_Api.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -31,6 +28,9 @@ public class UserService {
     }
 
     public User save(User user){
+        if (userRepository.findByUsername(user.getUsername()).isPresent()){
+            throw new DataIntegrityViolationException("The user " + user.getUsername() + " is already registered");
+        }
         return userRepository.save(user);
     }
 
@@ -39,11 +39,11 @@ public class UserService {
         User user = findById(id);
 
         if (!currentPassword.equals(user.getPassword())){
-            System.out.println("The passwords are wrong!");
+            throw new PasswordInvalidException("The current password is wrong");
         }
 
         if (!newPassword.equals(confirmPassword)){
-            System.out.println("The first password doesn't match with the second password");
+            throw new PasswordInvalidException("The new password doesn't match with the second password");
         }
 
         user.setPassword(newPassword);

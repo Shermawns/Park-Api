@@ -1,4 +1,4 @@
-package com.Park_Api.Controller.Responses;
+package com.Park_Api.controller.Responses;
 
 import com.Park_Api.entity.enums.Role;
 import java.time.LocalDate;

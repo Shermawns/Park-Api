@@ -1,4 +1,4 @@
-package com.Park_Api.Controller.Requests;
+package com.Park_Api.controller.Requests;
 
 import com.Park_Api.entity.enums.Role;
 import jakarta.validation.constraints.NotBlank;
