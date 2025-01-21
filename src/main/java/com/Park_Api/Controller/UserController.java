@@ -1,6 +1,8 @@
 package com.Park_Api.Controller;
 
+import com.Park_Api.Controller.Requests.PasswordRequest;
 import com.Park_Api.Controller.Requests.UserRequest;
+import com.Park_Api.Controller.Responses.PasswordResponse;
 import com.Park_Api.Controller.Responses.UserResponse;
 import com.Park_Api.entity.User;
 import com.Park_Api.mapper.UserMapper;
@@ -57,4 +59,18 @@ public class UserController {
 
         return ResponseEntity.ok().body(userMapper.toUserResponse(user));
     }
+
+    @PatchMapping(value = "/changePassword/{id}")
+    public ResponseEntity<PasswordResponse> changePassword(@PathVariable Long id, @RequestBody @Valid PasswordRequest passwordRequest){
+
+        if (id == null){
+            System.out.println("User id received is not exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        User user = userService.editPassword(id, passwordRequest.currentPassword(), passwordRequest.newPassword(), passwordRequest.confirmNewPassword());
+
+        return ResponseEntity.ok().body(userMapper.toPassword(user));
+    }
+
 }

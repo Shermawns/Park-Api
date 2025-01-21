@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -33,4 +34,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User editPassword(Long id, String currentPassword, String newPassword, String confirmPassword){
+
+        User user = findById(id);
+
+        if (!currentPassword.equals(user.getPassword())){
+            System.out.println("The passwords are wrong!");
+        }
+
+        if (!newPassword.equals(confirmPassword)){
+            System.out.println("The first password doesn't match with the second password");
+        }
+
+        user.setPassword(newPassword);
+
+        return save(user);
+    }
 }

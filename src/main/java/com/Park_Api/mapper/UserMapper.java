@@ -1,6 +1,7 @@
 package com.Park_Api.mapper;
 
 import com.Park_Api.Controller.Requests.UserRequest;
+import com.Park_Api.Controller.Responses.PasswordResponse;
 import com.Park_Api.Controller.Responses.UserResponse;
 import com.Park_Api.entity.User;
 import org.springframework.stereotype.Component;
@@ -44,5 +45,9 @@ public class UserMapper {
                         user.getCreatedBy(),
                         user.getUpdateBy()))
                 .collect(Collectors.toList());
+    }
+
+    public PasswordResponse toPassword (User user){
+        return new PasswordResponse(user.getPassword());
     }
 }

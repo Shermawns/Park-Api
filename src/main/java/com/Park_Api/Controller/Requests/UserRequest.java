@@ -3,6 +3,7 @@ package com.Park_Api.Controller.Requests;
 import com.Park_Api.entity.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record UserRequest (
 
@@ -12,6 +13,7 @@ public record UserRequest (
         String username,
 
         @NotBlank(message = "Password cannot be blank")
+        @Size(min = 6)
         String password,
         Role role,
         String createdBy
