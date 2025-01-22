@@ -5,6 +5,6 @@ CREATE TABLE tb_user(
     role VARCHAR(20) NOT NULL,
     created_date DATE NOT NULL,
     modification_date DATE,
-    created_by VARCHAR(255) NOT NULL,
-    update_by VARCHAR(255)
+    created_by VARCHAR(60) NOT NULL,
+    update_by VARCHAR(60)
 )

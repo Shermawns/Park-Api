@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService {
             throw new PasswordInvalidException("The new password doesn't match with the second password");
         }
 
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
 
         user.setModificationDate(LocalDate.now());
 

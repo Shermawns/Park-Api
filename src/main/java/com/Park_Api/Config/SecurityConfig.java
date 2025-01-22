@@ -14,8 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 @EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -33,9 +33,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "api/V1/user/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/V1/user/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/V1/user/find/{id}").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "api/V1/user").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "api/V1/user/changePassword").authenticated()
+//                        .requestMatchers(HttpMethod.GET, "api/V1/user/find/{id}").hasAuthority("ADMIN")
+//                        .requestMatchers(HttpMethod.GET, "api/V1/user").hasAuthority("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "api/V1/user/changePassword").authenticated()
                         .anyRequest().authenticated())
                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                .build();

@@ -20,7 +20,7 @@ public class User implements UserDetails{
     private String username;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role = Role.CLIENT;
+    private Role role = Role.ROLE_CLIENT;
     private LocalDate createdDate = LocalDate.now();
     private LocalDate modificationDate;
     private String createdBy;
@@ -90,8 +90,8 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("CLIENT"));
-        else return List.of(new SimpleGrantedAuthority("CLIENT"));
+        if (this.role == Role.ROLE_ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_CLIENT"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
     }
 
     @Override
@@ -142,6 +142,4 @@ public class User implements UserDetails{
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
-
-
 }
