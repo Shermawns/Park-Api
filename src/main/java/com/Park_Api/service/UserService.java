@@ -7,6 +7,7 @@ import com.Park_Api.exceptions.errors.PasswordInvalidException;
 import com.Park_Api.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -48,6 +49,8 @@ public class UserService {
 
         user.setPassword(newPassword);
 
-        return save(user);
+        user.setModificationDate(LocalDate.now());
+
+        return userRepository.save(user);
     }
 }

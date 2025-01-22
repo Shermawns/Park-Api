@@ -19,3 +19,7 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+  web:
+    locale-resolver: fixed
+    locale: pt_BR

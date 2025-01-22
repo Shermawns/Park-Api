@@ -1,6 +1,7 @@
 package com.Park_Api.entity;
 
 import com.Park_Api.entity.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
