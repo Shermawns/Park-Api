@@ -25,6 +25,8 @@ public class User implements UserDetails{
     private LocalDate modificationDate;
     private String createdBy;
     private String updateBy;
+    @OneToOne(mappedBy = "user")
+    private Client client;
 
     @PrePersist
     protected void onCreate() {
@@ -141,5 +143,13 @@ public class User implements UserDetails{
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

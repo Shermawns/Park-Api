@@ -58,6 +58,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(newPassword));
 
         user.setModificationDate(LocalDate.now());
+        user.setUpdateBy(user.getUsername());
 
         return userRepository.save(user);
     }
