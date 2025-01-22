@@ -65,6 +65,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> findAll(){
 
         List<User> list = userService.findAll();
@@ -74,6 +75,7 @@ public class UserController {
 
 
     @GetMapping(value = "/find/{id}")
+    @PreAuthorize("hasRole('ADMIN') OR ( hasRole('CLIENT') AND #id == principal.id )")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id){
 
         User user = userService.findById(id);
@@ -82,6 +84,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "/changePassword/{id}")
+    @PreAuthorize("(hasRole('ADMIN') and #id == principal.id) or (hasRole('CLIENT') and #id == principal.id)")
     public ResponseEntity<UserResponse> changePassword(@PathVariable Long id, @RequestBody @Valid PasswordRequest passwordRequest){
 
         User user = userService.editPassword(id, passwordRequest.currentPassword(), passwordRequest.newPassword(), passwordRequest.confirmNewPassword());
