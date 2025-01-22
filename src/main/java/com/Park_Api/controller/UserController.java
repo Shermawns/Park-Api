@@ -1,14 +1,23 @@
 package com.Park_Api.controller;
 
+import com.Park_Api.Config.TokenService;
+import com.Park_Api.controller.Requests.LoginRequest;
 import com.Park_Api.controller.Requests.PasswordRequest;
 import com.Park_Api.controller.Requests.UserRequest;
+import com.Park_Api.controller.Responses.LoginResponse;
 import com.Park_Api.controller.Responses.UserResponse;
 import com.Park_Api.entity.User;
 import com.Park_Api.mapper.UserMapper;
+import com.Park_Api.repository.UserRepository;
 import com.Park_Api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,20 +26,42 @@ import java.util.List;
 @RequestMapping(value = "api/V1/user")
 public class UserController {
 
+    private final UserRepository userRepository;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final TokenService tokenService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserRepository userRepository, UserService userService, UserMapper userMapper, TokenService tokenService, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.tokenService = tokenService;
+        this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest userRequest){
+    @PostMapping(value = "/register")
+    public ResponseEntity<UserResponse> create(@Validated @RequestBody UserRequest userRequest){
 
-        User newUser = userService.save(userMapper.toUserRequest(userRequest));
+        if (this.userRepository.findByUsername(userRequest.username()) != null) return ResponseEntity.badRequest().build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponse(newUser));
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userRequest.password());
+
+        User newUser = new User(userRequest.username(),encryptedPassword, userRequest.role(), userRequest.createdBy());
+
+        User saveUser = this.userRepository.save(newUser);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponse(saveUser));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid LoginRequest data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        var token = tokenService.generateToken((User)auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponse(token));
     }
 
     @GetMapping
@@ -40,6 +71,7 @@ public class UserController {
 
         return ResponseEntity.ok().body(userMapper.toListResponse(list));
     }
+
 
     @GetMapping(value = "/find/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id){

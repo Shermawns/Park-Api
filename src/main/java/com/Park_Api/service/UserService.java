@@ -5,17 +5,24 @@ import com.Park_Api.exceptions.errors.DataIntegrityViolationException;
 import com.Park_Api.exceptions.errors.EntityNotFoundException;
 import com.Park_Api.exceptions.errors.PasswordInvalidException;
 import com.Park_Api.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll(){
@@ -28,18 +35,19 @@ public class UserService {
         );
     }
 
-    public User save(User user){
-        if (userRepository.findByUsername(user.getUsername()).isPresent()){
-            throw new DataIntegrityViolationException("The user " + user.getUsername() + " is already registered");
+    public User save(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new DataIntegrityViolationException("The user '" + user.getUsername() + "' is already registered.");
         }
         return userRepository.save(user);
     }
+
 
     public User editPassword(Long id, String currentPassword, String newPassword, String confirmPassword){
 
         User user = findById(id);
 
-        if (!currentPassword.equals(user.getPassword())){
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())){
             throw new PasswordInvalidException("The current password is wrong");
         }
 
@@ -52,5 +60,10 @@ public class UserService {
         user.setModificationDate(LocalDate.now());
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 }
