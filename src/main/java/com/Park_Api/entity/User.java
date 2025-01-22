@@ -144,6 +144,7 @@ public class User implements UserDetails{
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
+<<<<<<< HEAD
 
     public Client getClient() {
         return client;
@@ -152,4 +153,6 @@ public class User implements UserDetails{
     public void setClient(Client client) {
         this.client = client;
     }
+=======
+>>>>>>> origin/main
 }
