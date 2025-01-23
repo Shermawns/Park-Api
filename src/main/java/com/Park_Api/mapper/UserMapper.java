@@ -1,7 +1,6 @@
 package com.Park_Api.mapper;
 
 import com.Park_Api.controller.Requests.UserRequest;
-import com.Park_Api.controller.Responses.PasswordResponse;
 import com.Park_Api.controller.Responses.UserResponse;
 import com.Park_Api.entity.User;
 import org.springframework.stereotype.Component;

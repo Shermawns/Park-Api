@@ -1,27 +1,39 @@
 package com.Park_Api.entity;
 
+import com.Park_Api.entity.enums.Role;
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "tb_client")
 public class Client {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String cpf;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.ROLE_CLIENT;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
     public Client() {
     }
 
-    public Client(Long id, String name, String cpf, User user) {
+    public Client(Long id, String name, String cpf, User user, Role role) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.user = user;
+        this.role = role;
+    }
+
+    public Client(String name, String cpf) {
+        this.name = name;
+        this.cpf = cpf;
     }
 
     public Long getId() {
@@ -55,4 +67,9 @@ public class Client {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Role getRole() {
+        return role;
+    }
+
 }

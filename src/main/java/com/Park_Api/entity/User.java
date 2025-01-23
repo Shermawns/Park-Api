@@ -1,7 +1,6 @@
 package com.Park_Api.entity;
 
 import com.Park_Api.entity.enums.Role;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,6 +44,7 @@ public class User implements UserDetails{
         this.createdBy = createdBy;
         this.updateBy = updateBy;
     }
+
 
     public User(String username, String password, Role role, String name) {
         this.username = username;
@@ -92,7 +92,7 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == Role.ROLE_ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_CLIENT"));
+        if (this.role == Role.ROLE_ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
         else return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
     }
 
@@ -144,7 +144,6 @@ public class User implements UserDetails{
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
-<<<<<<< HEAD
 
     public Client getClient() {
         return client;
@@ -153,6 +152,4 @@ public class User implements UserDetails{
     public void setClient(Client client) {
         this.client = client;
     }
-=======
->>>>>>> origin/main
 }
