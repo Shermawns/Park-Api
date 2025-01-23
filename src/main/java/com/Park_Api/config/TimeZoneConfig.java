@@ -1,4 +1,4 @@
-package com.Park_Api.Config;
+package com.Park_Api.config;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;

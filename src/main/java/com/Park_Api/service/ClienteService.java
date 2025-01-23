@@ -22,13 +22,10 @@ public class ClienteService {
         return clienteRepository.save(client);
     }
 
-    public Optional<Client> findById(Long id){
+    public Client findById(Long id){
 
-        Optional<Client> userId = clienteRepository.findById(id);
-
-        if (userId.isEmpty()){
-            throw new EntityNotFoundException("The user with ID "+ id + " doesn't exist.");
-        }
+        Client userId = clienteRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Client %s not found in the system", id)));
 
         return userId;
     }
@@ -38,4 +35,7 @@ public class ClienteService {
     }
 
 
+    public Client findUser(Long id) {
+        return clienteRepository.findUserById(id);
+    }
 }

@@ -1,4 +1,4 @@
-package com.Park_Api.Config;
+package com.Park_Api.config;
 
 
 import com.Park_Api.entity.User;
