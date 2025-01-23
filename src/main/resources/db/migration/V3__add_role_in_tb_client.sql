@@ -1,0 +1,2 @@
+ALTER TABLE tb_client
+ADD role VARCHAR(20);
