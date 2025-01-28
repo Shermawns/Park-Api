@@ -74,11 +74,14 @@ public class ClientController {
                             content = @Content(schema = @Schema(implementation = ClientResponse.class))),
                     @ApiResponse(responseCode = "404", description = "Client not found")
             })
+
+
     @GetMapping(value = "/details")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<ClientResponse> getDetails(@AuthenticationPrincipal User user) {
 
-        Client client = clienteService.findUser(user.getId());
+        Client client = clienteService.findUserById(user.getId());
+
         return ResponseEntity.ok().body(clientMapper.toResponse(client));
     }
 }

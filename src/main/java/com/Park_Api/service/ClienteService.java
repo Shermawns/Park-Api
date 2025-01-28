@@ -35,7 +35,7 @@ public class ClienteService {
     }
 
 
-    public Client findUser(Long id) {
-        return clienteRepository.findUserById(id);
+    public Client findUserById(Long id) {
+        return clienteRepository.findByUserId(id);
     }
 }

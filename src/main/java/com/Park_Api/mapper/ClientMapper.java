@@ -22,12 +22,17 @@ public class ClientMapper {
                 client.getId(),
                 client.getName(),
                 client.getCpf(),
-                client.getRole()
+                client.getRole(),
+                client.getCreatedDate(),
+                client.getModificationDate(),
+                client.getCreatedBy(),
+                client.getUpdateBy()
         );
     }
 
     public List<ClientResponse> toListResponse(List<Client> clients){
         return clients.stream()
-                .map(client -> new ClientResponse(client.getId(), client.getName(), client.getCpf(), client.getRole())).toList();
+                .map(client -> new ClientResponse(client.getId(), client.getName(), client.getCpf(), client.getRole(), client.getCreatedDate()
+                ,client.getModificationDate(),client.getCreatedBy(),client.getUpdateBy())).toList();
     }
 }

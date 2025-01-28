@@ -2,6 +2,11 @@ package com.Park_Api.entity;
 
 import com.Park_Api.entity.enums.Role;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,17 +26,16 @@ public class User implements UserDetails{
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_CLIENT;
-    private LocalDate createdDate = LocalDate.now();
+    @CreatedDate
+    private LocalDate createdDate;
+    @LastModifiedDate
     private LocalDate modificationDate;
+    @CreatedBy
     private String createdBy;
+    @LastModifiedBy
     private String updateBy;
     @OneToOne(mappedBy = "user")
     private Client client;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdDate = LocalDate.now();
-    }
 
     public User() {
     }
