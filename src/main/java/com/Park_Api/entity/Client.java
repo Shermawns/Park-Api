@@ -23,7 +23,6 @@ public class Client {
     private String cpf;
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_CLIENT;
-
     @CreatedDate
     private LocalDate createdDate;
     @LastModifiedDate
