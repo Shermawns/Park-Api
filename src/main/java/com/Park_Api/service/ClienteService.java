@@ -38,4 +38,8 @@ public class ClienteService {
     public Client findUserById(Long id) {
         return clienteRepository.findByUserId(id);
     }
+
+    public Client findByCpf(String clientCpf) {
+        return clienteRepository.findByCpf(clientCpf);
+    }
 }
