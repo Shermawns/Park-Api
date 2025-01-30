@@ -42,4 +42,5 @@ public class ParkingSpotController {
 
         return ResponseEntity.ok().body(parkingMapper.toResponse(parkingSpot));
     }
+
 }

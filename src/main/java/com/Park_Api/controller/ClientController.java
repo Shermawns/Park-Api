@@ -4,6 +4,7 @@ import com.Park_Api.controller.Requests.ClientRequest;
 import com.Park_Api.controller.Responses.ClientResponse;
 import com.Park_Api.entity.Client;
 import com.Park_Api.entity.User;
+import com.Park_Api.exceptions.errors.DataIntegrityViolationException;
 import com.Park_Api.mapper.ClientMapper;
 import com.Park_Api.service.ClienteService;
 import com.Park_Api.service.UserService;
@@ -36,16 +37,15 @@ public class ClientController {
         this.clientMapper = clientMapper;
     }
 
-    @Operation(summary = "Register a new client", description = "Creates a new client for the authenticated user",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Client registered successfully",
-                            content = @Content(schema = @Schema(implementation = ClientResponse.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid request data")
-            })
+
     @PostMapping(value = "/register")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<ClientResponse> register(@Validated @RequestBody ClientRequest clientRequest,
                                                    @AuthenticationPrincipal User user) {
+
+        if (user.getClient() != null) {
+            throw new DataIntegrityViolationException("That user is already register an client!");
+        }
 
         Client client = clientMapper.toClient(clientRequest);
         client.setUser(user);
@@ -54,12 +54,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clientMapper.toResponse(result));
     }
 
-    @Operation(summary = "Retrieve all clients", description = "Returns a list of all registered clients",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "List of clients returned successfully",
-                            content = @Content(schema = @Schema(implementation = ClientResponse.class))),
-                    @ApiResponse(responseCode = "403", description = "Access forbidden for non-admin users")
-            })
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ClientResponse>> findAll() {
@@ -67,13 +62,6 @@ public class ClientController {
         List<Client> list = clienteService.findAll();
         return ResponseEntity.ok().body(clientMapper.toListResponse(list));
     }
-
-    @Operation(summary = "Get client details", description = "Retrieves details of the authenticated client",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Client details retrieved successfully",
-                            content = @Content(schema = @Schema(implementation = ClientResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "Client not found")
-            })
 
 
     @GetMapping(value = "/details")

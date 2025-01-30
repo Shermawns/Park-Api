@@ -49,4 +49,5 @@ public class ParkingSpotService {
         return parkingSpotRepository.findFirstByStatus(ParkingStatus.AVAILABLE)
                 .orElseThrow(()->new EntityNotFoundException("Doesn't have any spot available"));
     }
+
 }
