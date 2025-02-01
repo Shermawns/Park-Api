@@ -27,13 +27,6 @@ public class ParkingSpotService {
         return parkingSpotRepository.save(ParkingSpot);
     }
 
-    public ParkingSpot findById(Long id){
-
-        ParkingSpot userId = parkingSpotRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Client %s not found in the system", id)));
-
-        return userId;
-    }
 
     public List<ParkingSpot> findAll(){
         return parkingSpotRepository.findAll();

@@ -22,14 +22,6 @@ public class ClienteService {
         return clienteRepository.save(client);
     }
 
-    public Client findById(Long id){
-
-        Client userId = clienteRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Client %s not found in the system", id)));
-
-        return userId;
-    }
-
     public List<Client> findAll(){
         return clienteRepository.findAll();
     }

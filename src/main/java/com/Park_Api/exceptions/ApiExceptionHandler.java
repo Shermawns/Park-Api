@@ -1,6 +1,7 @@
 package com.Park_Api.exceptions;
 import com.Park_Api.exceptions.errors.DataIntegrityViolationException;
 import com.Park_Api.exceptions.errors.EntityNotFoundException;
+import com.Park_Api.exceptions.errors.NoPermissionException;
 import com.Park_Api.exceptions.errors.PasswordInvalidException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,11 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(errorMessage);
     }
-
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<ErrorMessage> noPermissionException(NoPermissionException ex, HttpServletRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(errorMessage);
+    }
 }

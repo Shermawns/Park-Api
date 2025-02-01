@@ -7,11 +7,12 @@ import com.Park_Api.entity.User;
 import com.Park_Api.exceptions.errors.DataIntegrityViolationException;
 import com.Park_Api.mapper.ClientMapper;
 import com.Park_Api.service.ClienteService;
-import com.Park_Api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import com.Park_Api.service.UserService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/V1/client")
-@Tag(name = "Client API", description = "Endpoints for managing clients")
+@Tag(name = "Client API", description = "Endpoints for managing clients.")
 public class ClientController {
 
     private final UserService userService;
@@ -36,8 +37,16 @@ public class ClientController {
         this.clienteService = clienteService;
         this.clientMapper = clientMapper;
     }
-
-
+@Operation(summary = "Register Client", description = "Registers a new client. " +
+        "Only CLIENT role users can register themselves as clients.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Client successfully registered",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ClientResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "User already has a registered client",
+                            content = @Content(mediaType = "application/json;charset=UTF-8")),
+})
     @PostMapping(value = "/register")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<ClientResponse> register(@Validated @RequestBody ClientRequest clientRequest,
@@ -55,14 +64,35 @@ public class ClientController {
     }
 
 
+
+    @Operation(summary = "List All Clients", description = "Retrieves a list of all registered clients. " +
+            "Only accessible to ADMIN users.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "List of clients",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ClientResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Access denied",
+                            content = @Content(mediaType = "application/json;charset=UTF-8")),
+            })
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ClientResponse>> findAll() {
-
         List<Client> list = clienteService.findAll();
         return ResponseEntity.ok().body(clientMapper.toListResponse(list));
     }
 
+
+    @Operation(summary = "Get Client Details", description = "Retrieves the authenticated client's details.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Client details retrieved",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ClientResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Access denied",
+                            content = @Content(mediaType = "application/json;charset=UTF-8")),
+            })
 
     @GetMapping(value = "/details")
     @PreAuthorize("hasRole('CLIENT')")

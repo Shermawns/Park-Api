@@ -11,6 +11,7 @@ import java.util.Optional;
 @Configuration
 @EnableJpaAuditing
 public class JpaAuditingConfig implements AuditorAware<String> {
+
     @Override
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -20,4 +21,5 @@ public class JpaAuditingConfig implements AuditorAware<String> {
         }
         return Optional.empty();
     }
+
 }
