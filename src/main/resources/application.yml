@@ -12,7 +12,7 @@ spring:
 
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/Park-Api
+    url: jdbc:postgresql://localhost:5431/Park-Api
     username: postgres
     password: admin
 
