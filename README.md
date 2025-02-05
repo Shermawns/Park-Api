@@ -68,6 +68,7 @@
     <li>📂 Spring Data JPA</li>
     <li>🔒 Spring Security</li>
     <li>🔑 JWT Token para autenticação</li>
+    <li>🔎Sistema de Auditoria</li>
     <li>🛠 Flyway para migração e versionamento do banco de dados</li>
     <li>🐘 PostgreSQL</li>
     <li>📜 Springdoc OpenAPI (Swagger) para documentação da API</li>
